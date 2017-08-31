@@ -1,223 +1,184 @@
 
-  // main question ,answer and correct variable 
+var panel = $("#quiz-area");
+var countStartNumber = 30;
+
+// Question set
 var questions = [{
-        question: "What nationality was Marco Polo?",
-        answers: {
-            a: "Italian",
-            b: "Germany",
-            c: "Portuguese",
-            d: "Canadian"
-        },
+  question: "What was the first full length CGI movie?",
+  answers: ["A Bug's Life", "Monsters Inc.", "Toy Story", "The Lion King"],
+  correctAnswer: "Toy Story",
+  image: "assets/images/toystory.gif"
+}, {
+  question: "Which of these is NOT a name of one of the Spice Girls?",
+  answers: ["Sporty Spice", "Fred Spice", "Scary Spice", "Posh Spice"],
+  correctAnswer: "Fred Spice",
+  image: "assets/images/spicegirls.gif"
+}, {
+  question: "Which NBA team won the most titles in the 90s?",
+  answers: ["New York Knicks", "Portland Trailblazers", "Los Angeles Lakers", "Chicago Bulls"],
+  correctAnswer: "Chicago Bulls",
+  image: "assets/images/bulls.gif"
+}, {
+  question: "Which group released the hit song, 'Smells Like Teen Spirit'?",
+  answers: ["Nirvana", "Backstreet Boys", "The Offspring", "No Doubt"],
+  correctAnswer: "Nirvana",
+  image: "assets/images/nirvanabark.gif"
+}, {
+  question: "Which popular Disney movie featured the song, \"Circle of Life\"?",
+  answers: ["Aladdin", "Hercules", "Mulan", "The Lion King"],
+  correctAnswer: "The Lion King",
+  image: "assets/images/lionking.gif"
+}, {
+  question: "Finish this line from the Fresh Prince of Bel-Air theme song: \"I whistled for a cab and when it came near, the license plate said...\"",
+  answers: ["Dice", "Mirror", "Fresh", "Cab"],
+  correctAnswer: "Fresh",
+  image: "assets/images/fresh.gif"
+}, {
+  question: "What was Doug's best friend's name?",
+  answers: ["Skeeter", "Mark", "Zach", "Cody"],
+  correctAnswer: "Skeeter",
+  image: "assets/images/skeeter.gif"
+}, {
+  question: "What was the name of the principal at Bayside High in Saved By The Bell?",
+  answers: ["Mr.Zhou", "Mr.Driggers", "Mr.Belding", "Mr.Page"],
+  correctAnswer: "Mr.Belding",
+  image: "assets/images/belding.gif"
+}];
 
-        correct: "Italian"
-    },
+// Variable to hold our setInterval
+var timer;
 
-    {
-        question: "What is capital city of Texas?",
-        answers: {
-            a: "NewYork",
-            b: "Austin",
-            c: "Dallas",
-            d: "None"
-        },
+var game = {
 
-        correct: "Austin"
-    },
+  questions: questions,
+  currentQuestion: 0,
+  counter: countStartNumber,
+  correct: 0,
+  incorrect: 0,
 
-    {
-        question: "Where is the smallest bone in the body?",
-        answers: {
-            a: "Ear",
-            b: "Nose",
-            c: "Finger",
-            d: "None"
-        },
-
-        correct: "Ear"
-    },
-
-    {
-        question: "Which planet is nearest the sun? ",
-        answers: {
-            a: "Mercury",
-            b: "Mars",
-            c: "Earth",
-            d: "Saturn"
-        },
-
-        correct: "Mercury"
-    },
-
-    {
-        question: "What is capital city of Ethiopia?",
-        answers: {
-            a: "Harar",
-            b: "AddisAbeba",
-            c: "Gonder",
-            d: "Axum"
-        },
-
-        correct: "AddisAbeba"
-    },
-
-
-    {
-        question: "Which is the largest ocean?",
-        answers: {
-            a: "Atlantic Ocean",
-            b: "Arctic Ocean",
-            c: "Southern Ocean",
-            d: "Pacific Ocean"
-        },
-
-        correct: "Arctic ocean"
+  countdown: function() {
+    this.counter--;
+    $("#counter-number").html(this.counter);
+    if (this.counter === 0) {
+      console.log("TIME UP");
+      this.timeUp();
     }
+  },
 
-];
+  loadQuestion: function() {
 
-   // correctly ansewred variable
-var correctAnswers = 0;
- // incorrect answer variable
-var incorrectAnswer = 0;
-// unanswered variable
-var unAnswered = 0;
-var intervalId;
- // numbers that count to finish quiz
-var count = 40;
+    timer = setInterval(this.countdown.bind(this), 1000);
 
-    // Execute this code when the DOM has fully loaded.
+    panel.html("<h2>" + questions[this.currentQuestion].question + "</h2>");
 
-$(document).ready(function() {
+    for (var i = 0; i < questions[this.currentQuestion].answers.length; i++) {
+      panel.append("<button class='answer-button' id='button' data-name='" + questions[this.currentQuestion].answers[i]
+      + "'>" + questions[this.currentQuestion].answers[i] + "</button>");
+    }
+  },
 
+  nextQuestion: function() {
+    this.counter = window.countStartNumber;
+    $("#counter-number").html(this.counter);
+    this.currentQuestion++;
+    this.loadQuestion.bind(this)();
+  },
 
+  timeUp: function() {
 
-     // function to start game by press start button
-    $("#start").on("click", function() {
+    clearInterval(window.timer);
 
-        $("#start").hide();
-        $("#quiz").show();
-        $("#done").show();
-        $("#result").hide();
+    $("#counter-number").html(this.counter);
 
-        // fuction to set 1 second to count numbers
-        function run() {
-            intervalId = setInterval(decrement, 1000);
-        }
+    panel.html("<h2>Out of Time!</h2>");
+    panel.append("<h3>The Correct Answer was: " + questions[this.currentQuestion].correctAnswer);
+    panel.append("<img src='" + questions[this.currentQuestion].image + "' />");
 
-        //  The decrement function.
-        function decrement() {
+    if (this.currentQuestion === questions.length - 1) {
+      setTimeout(this.results, 3 * 1000);
+    }
+    else {
+      setTimeout(this.nextQuestion, 3 * 1000);
+    }
+  },
 
-            //  Decrease number by one.
-            count--;
+  results: function() {
 
-            //  Show the number in the #show-number tag.
-            $("#timer").html("<h2>" + "Time Remaining: " + count + " seconds" + "</h2>");
+    clearInterval(window.timer);
 
+    panel.html("<h2>All done, heres how you did!</h2>");
 
-            //  Once number hits zero...
-            if (count === 0) {
+    $("#counter-number").html(this.counter);
 
-                
+    panel.append("<h3>Correct Answers: " + this.correct + "</h3>");
+    panel.append("<h3>Incorrect Answers: " + this.incorrect + "</h3>");
+    panel.append("<h3>Unanswered: " + (questions.length - (this.incorrect + this.correct)) + "</h3>");
+    panel.append("<br><button id='start-over'>Start Over?</button>");
+  },
 
+  clicked: function(e) {
+    clearInterval(window.timer);
+    if ($(e.target).attr("data-name") === questions[this.currentQuestion].correctAnswer) {
+      this.answeredCorrectly();
+    }
+    else {
+      this.answeredIncorrectly();
+    }
+  },
 
-                // once the noumber is 0 hide and show the function
-                $("#timer").hide();
-                $("#quiz").hide();
-                $("#done").hide();
-                $("#result").show();
+  answeredIncorrectly: function() {
 
-                // Second option to stop the quiz and calculate the result
-                for (var i = 0; i < questions.length; i++) {
+    this.incorrect++;
 
-                    if (selectedAnswers[i] === questions[i].correct) {
-                        correctAnswers++;
+    clearInterval(window.timer);
 
-                    } else if (selectedAnswers[i] === "K") {
+    panel.html("<h2>Nope!</h2>");
+    panel.append("<h3>The Correct Answer was: " + questions[this.currentQuestion].correctAnswer + "</h3>");
+    panel.append("<img src='" + questions[this.currentQuestion].image + "' />");
 
-                        unAnswered++;
+    if (this.currentQuestion === questions.length - 1) {
+      setTimeout(this.results.bind(this), 3 * 1000);
+    }
+    else {
+      setTimeout(this.nextQuestion.bind(this), 3 * 1000);
+    }
+  },
 
-                    } else {
-                        incorrectAnswer++;
+  answeredCorrectly: function() {
 
-                    }
-                }
+    clearInterval(window.timer);
 
-            }
+    this.correct++;
 
+    panel.html("<h2>Correct!</h2>");
+    panel.append("<img src='" + questions[this.currentQuestion].image + "' />");
 
-                 // once the number is 0 display result
-            $("#result").html("<h2>" + "Correct answers " + correctAnswers + "</h2>");
-            $("#result").append("<h2>" + "Wrong answers " + incorrectAnswer + "</h2>");
-            $("#result").append("<h2>" + "Unanswered " + unAnswered + "</h2>");
+    if (this.currentQuestion === questions.length - 1) {
+      setTimeout(this.results.bind(this), 3 * 1000);
+    }
+    else {
+      setTimeout(this.nextQuestion.bind(this), 3 * 1000);
+    }
+  },
 
-        }
-       // run function of timer
-        run();
-       
-          // for loop to Display all questions
-        for (var i = 0; i < questions.length; i++) {
-            $("#quiz").append("<div>" + questions[i].question + "</div>");
-              // for loop to Display all answers
-            for (key in questions[i].answers) {
-                // Display the answer key with radio button
-                if (questions[i].answers.hasOwnProperty(key)) {
+  reset: function() {
+    this.currentQuestion = 0;
+    this.counter = countStartNumber;
+    this.correct = 0;
+    this.incorrect = 0;
+    this.loadQuestion();
+  }
+};
 
-                    $("#quiz").append("<input type='radio' class='selections' name=" + i + " " + "value=" + questions[i].answers[key] + ">" + questions[i].answers[key]);
+// CLICK EVENTS
 
-                }
+$(document).on("click", "#start-over", game.reset.bind(game));
 
-            }
-        }
+$(document).on("click", ".answer-button", function(e) {
+  game.clicked.bind(game, e)();
+});
 
-         // collecting the user answers and we used "k"  to start from something instead of 0 when they select one anser k will change by the value of cliced answer
-             
-        var selectedAnswers = ["K", "K", "K", "K", "K", "K"];
-          // function to gate clicked answers value 
-
-        $("body").on('click', '.selections', function() {
-
-           selectedAnswers[$(this).attr('name')] = $(this).attr('value');
-        });
-
-           // submit/done function 
-
-        $("#done").on("click", function() {
-            for (var i = 0; i < questions.length; i++) {
-                  // check the selected answer and the correct answer
-
-                if (selectedAnswers[i] === questions[i].correct) {
-                  // if they pic the correct answer and 1 to their result
-                    correctAnswers++;
-                   // if the user is not select any of the choice count the number of "k"
-                } else if (selectedAnswers[i] === "K") {
-                  // count the rest of unchanged number of "k" this is to show number of un unanswered question
-                    unAnswered++;
-
-                } else {
-                    // count the number of incorect answers if it is not equal to the correct answer or "k" add by 1 
-                    incorrectAnswer++;
-
-                }
-
-            }
-              // hide the timer,questions and done button when they press done button and Display the result
-
-            $("#timer").hide();
-            $("#quiz").hide();
-            $("#done").hide();
-            $("#result").show();
-                 
-                 // Display the result in demo when they press done
-            $("#result").html("<h2>" + "Correct answers " + correctAnswers + "</h2>");
-            $("#result").append("<h2>" + "Wrong answers " + incorrectAnswer + "</h2>");
-            $("#result").append("<h2>" + "Unanswered " + unAnswered + "</h2>");
-
-
-        });
-
-
-    });
-
-
-
-}); 
+$(document).on("click", "#start", function() {
+  $("#sub-wrapper").prepend("<h2>Time Remaining: <span id='counter-number'>30</span> Seconds</h2>");
+  game.loadQuestion.bind(game)();
+});

@@ -1,41 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
 
-<head>
+<html lang="en-us">
 
-    <meta charset="utf-8">
-    <title>Trival game</title>
-   <!--  bootstrap Link -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css ">
-    <!-- jQuery Link -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- Game Logic -->
-    <script type="text/javascript" src="assets/javascript/app.js"></script>
-    <!-- CSS -->
+  <head>
+
+    <meta charset="UTF-8">
+    <title>Totally Trivial Trivia</title>
+
+    <!-- CSS Reset Sheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css">
+
+    <!-- Out Own CSS Sheet -->
     <link rel="stylesheet" href="assets/css/style.css">
-</head>
 
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<body>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Geo" rel="stylesheet" type="text/css">
 
-  
-    <div class="container">
-        <h1>Totally Trivial Trivia!</h1>
-      <!--    time Display -->
-        <div id="timer"></div>
-      <!--   question/answer Display -->
-        <div id="quiz"></div>
-        <!--   result Display -->
-        <div id="result"></div>
-           <!--  button Display to start game -->
-        <div id="start"><button>Start</button></div>
-           <!--  done button Display -->
-        <div id="done"><button>Done</button></div>
+  </head>
 
+  <body>
 
+    <div id="wrapper">
+      <h1>Totally Trivial Trivia!</h1>
+      <div id="sub-wrapper">
+        <div id="quiz-area">
+          <button id="start">Start</button>
+        </div>
+      </div>
     </div>
 
+    <!-- Script -->
+    <script type="text/javascript" src="assets/javascript/app.js"></script>
 
-</body>
+  </body>
 
 </html>
+
